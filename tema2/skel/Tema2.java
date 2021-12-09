@@ -17,9 +17,16 @@ public class Tema2 {
         threadNumber = Integer.parseInt(args[0]); // Number of threads
         inputFile = args[1];// Input file
         outputFile = args[2];// Output file
+        System.out.println("THREAD NUMBER "+threadNumber);
+        System.out.println("INPUT FILE"+inputFile);
+        System.out.println("outputfile "+outputFile);
 
         CoordThread coordThread = new CoordThread(inputFile, threadNumber);
-        coordThread.submitTasks();
+        try{
+            coordThread.submitTasks();
+        } catch (IOException e) {
+            System.err.println(e);
+        }
 
     }
 }
