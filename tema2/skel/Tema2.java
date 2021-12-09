@@ -1,5 +1,8 @@
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Tema2 {
     static Integer threadNumber;
@@ -15,6 +18,8 @@ public class Tema2 {
         inputFile = args[1];// Input file
         outputFile = args[2];// Output file
 
-        
+        CoordThread coordThread = new CoordThread(inputFile, threadNumber);
+        coordThread.submitTasks();
+
     }
 }
