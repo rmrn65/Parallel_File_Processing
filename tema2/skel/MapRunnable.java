@@ -9,7 +9,8 @@ public class MapRunnable implements Runnable {
 	}
     @Override
     public void run() {
-        System.out.println("DOC NAME: "+docName +" OFFSET: "+offset);        
+        // System.out.println("DOC NAME: "+docName +" OFFSET: "+offset);        
+        
     }
 
 }

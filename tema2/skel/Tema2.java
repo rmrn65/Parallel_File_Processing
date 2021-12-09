@@ -1,9 +1,19 @@
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class Tema2 {
     static Integer threadNumber;
     static String inputFile;
     static String outputFile;
+
+    void readFromFIle(String file,int offset, int size) throws IOException {
+        RandomAccessFile raf = new RandomAccessFile(file, "r");
+        raf.seek(0);
+        System.out.println(raf.readUTF());
+        raf.seek(0);
+        raf.close();
+    }
+
     public static void main(String[] args) {
         if (args.length < 3) {
             System.err.println("Usage: Tema2 <workers> <in_file> <out_file>");
@@ -17,12 +27,35 @@ public class Tema2 {
         System.out.println("INPUT FILE"+inputFile);
         System.out.println("outputfile "+outputFile);
 
-        CoordThread coordThread = new CoordThread(inputFile, threadNumber);
-        try{
-            coordThread.submitTasks();
-        } catch (IOException e) {
-            System.err.println(e);
-        }
+        // CoordThread coordThread = new CoordThread(inputFile, threadNumber);
+        // try{
+        //     coordThread.submitTasks();
+        // } catch (IOException e) {
+        //     System.err.println(e);
+        // }
+        // Tema2 tema2 = new Tema2();
+        // try {
+        //     tema2.readFromFIle("doc.txt", 0, 0);
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
+        try {
+            // create a new RandomAccessFile with filename test
+            RandomAccessFile raf = new RandomAccessFile("doc.txt", "rw");
+            byte[] b = new byte[20];
+            byte sb;
+            //raf.read(b,5,6);
+            // raf.seek(6);
+            raf.read(b,0,20);
+            System.out.println(raf.getFilePointer());
+            String s = new String(b, StandardCharsets.UTF_8);
+            System.out.println(s);
+            for(String val: s.split("[ .!?]+"))
+                System.out.println("WORD: " + val);
 
+            raf.close();
+         } catch (IOException ex) {
+            ex.printStackTrace();
+         }
     }
 }
