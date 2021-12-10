@@ -1,11 +1,15 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CoordThread {
     String inputFile;
@@ -19,6 +23,9 @@ public class CoordThread {
     public void submitTasks() throws IOException{
         // Executor service witch will submit tasks
         ExecutorService tpe = Executors.newFixedThreadPool(threadNumber);
+        //AtomicInteger inQueue = new AtomicInteger(0);
+        List<MapRunnable> futureList = new ArrayList<MapRunnable>();
+        List<Future<Result>> futures = new ArrayList<>();
         try{
             File file = new File(inputFile);
             // Using scanner to read file inputs
@@ -28,24 +35,39 @@ public class CoordThread {
                 // Creating tasks for workers
                 // Tasks will be added to the pool with tpe
                 for(int i = 0 ; i < docNumber ; ++i) {
-                    File currentDoc = new File("../" + scanner.next());                
+                    File currentDoc = new File("../" + scanner.next());
+                    mapResults.put(currentDoc.getPath(), new ArrayList<>());              
                     long docSize = currentDoc.length();
                     int offset = 0;
                     // Create tasks for each file with right offset of fragmentSize
                     while(offset < docSize){
                         if(docSize - offset < fragmentSize)
-                            tpe.submit(new MapRunnable(currentDoc.getPath(), offset, (int)docSize - offset));
+                            futureList.add(new MapRunnable(currentDoc.getPath(), offset, (int)docSize - offset));
                         else
-                            tpe.submit(new MapRunnable(currentDoc.getPath(), offset, fragmentSize));
+                            futureList.add(new MapRunnable(currentDoc.getPath(), offset, fragmentSize));
                         offset += fragmentSize;
                     }
                 }
             }
+            try {
+                futures = tpe.invokeAll(futureList);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            System.out.println("COMPLETED");
             tpe.shutdown();
+            // tpe.awaitTermination(arg0, arg1)
+            System.out.println();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-
+        try {
+            for(int i = 0; i < futures.size() ; i ++)
+                System.out.println(futures.get(i).get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }
