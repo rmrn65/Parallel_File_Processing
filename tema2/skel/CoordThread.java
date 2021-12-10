@@ -9,7 +9,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class CoordThread {
     String inputFile;
@@ -24,7 +23,7 @@ public class CoordThread {
         // Executor service witch will submit tasks
         ExecutorService tpe = Executors.newFixedThreadPool(threadNumber);
         //AtomicInteger inQueue = new AtomicInteger(0);
-        List<MapRunnable> futureList = new ArrayList<MapRunnable>();
+        List<MapCallable> futureList = new ArrayList<MapCallable>();
         List<Future<Result>> futures = new ArrayList<>();
         try{
             File file = new File(inputFile);
@@ -42,9 +41,9 @@ public class CoordThread {
                     // Create tasks for each file with right offset of fragmentSize
                     while(offset < docSize){
                         if(docSize - offset < fragmentSize)
-                            futureList.add(new MapRunnable(currentDoc.getPath(), offset, (int)docSize - offset));
+                            futureList.add(new MapCallable(currentDoc.getPath(), offset, (int)docSize - offset));
                         else
-                            futureList.add(new MapRunnable(currentDoc.getPath(), offset, fragmentSize));
+                            futureList.add(new MapCallable(currentDoc.getPath(), offset, fragmentSize));
                         offset += fragmentSize;
                     }
                 }

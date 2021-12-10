@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 
-public class MapRunnable implements Callable<Result> {
+public class MapCallable implements Callable<Result> {
     String docName;
     int offset;
     int fragmentSize;
     HashMap<Integer,Integer> wordsLengthCounter;
     List<String> maxLengthWords;
-    public MapRunnable(String docName, int offset, int fragmentSize) {
+    public MapCallable(String docName, int offset, int fragmentSize) {
 		this.docName = docName;
         this.offset = offset;
         this.fragmentSize = fragmentSize;
