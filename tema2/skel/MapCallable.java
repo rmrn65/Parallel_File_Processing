@@ -5,22 +5,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.Callable;
 
-public class MapRunnable implements Runnable {
+public class MapCallable implements Callable<MapResult> {
     String docName;
     int offset;
     int fragmentSize;
     HashMap<Integer,Integer> wordsLengthCounter;
     List<String> maxLengthWords;
-    public MapRunnable(String docName, int offset, int fragmentSize) {
+    public MapCallable(String docName, int offset, int fragmentSize) {
 		this.docName = docName;
         this.offset = offset;
         this.fragmentSize = fragmentSize;
         wordsLengthCounter = new HashMap<>();
         maxLengthWords = new ArrayList<>();
 	}
+    public boolean isNotSeparator(Character c) {
+        return Character.isLetter(c) || Character.isDigit(c);
+    }
     @Override
-    public void run() {
+    public MapResult call() throws Exception {
         try {
             Boolean ignoreFirst = false;
             char next,prev;
@@ -32,7 +36,7 @@ public class MapRunnable implements Runnable {
             raf.seek(offset + fragmentSize - 1); // Move cursor in file by offset
             prev = (char)raf.read();
             next = (char)raf.read();
-            while((Character.isLetter(next) && Character.isLetter(prev))|| Character.isDigit(next)) { //TODO Fa un check mai bun aici
+            while(isNotSeparator(next) && isNotSeparator(prev)) { 
                 next = (char)raf.read();
                 index++;
             }
@@ -58,6 +62,7 @@ public class MapRunnable implements Runnable {
             while(st.hasMoreTokens()) {
                 // Set number of occurances of length
                 String nextWord =new String( st.nextToken().toString());
+
                 Integer value = wordsLengthCounter.get(nextWord.length());
                 if(value == null) {
                     wordsLengthCounter.put(nextWord.length(),1);
@@ -78,25 +83,9 @@ public class MapRunnable implements Runnable {
         } catch (IOException ex) {
            ex.printStackTrace();
         }
-        // for(Integer key: wordsLengthCounter.keySet()) {
-        //     System.out.println("IN DOCUMENT " + docName + " Key: "+ key + " Val: " + wordsLengthCounter.get(key));
-        // }
-    //    // System.out.println(wordsLengthCounter.toString());
-        Result result = new Result(wordsLengthCounter, maxLengthWords);
-        //System.out.println(result.toString());
-        // The creation of the list must be synchronized so no 2 threads
-        // are initializing the list. It is synchronized by the key where
-        // the thread is going to add the result (the document's name).
-        synchronized(MapRunnable.class){ //TODO SYNCRONIZEAZA PE ALTCEVA MAI LOGIC
-           if(CoordThread.mapResults.get(docName) == null) {
-               List<Result> resultsList = new ArrayList<>();
-               resultsList.add(result);
-               CoordThread.mapResults.put(docName, resultsList);
-            }
-        }
-        if(CoordThread.mapResults.get(docName) != null) {
-            CoordThread.mapResults.get(docName).add(result);
-        }
+
+        MapResult result = new MapResult(docName, wordsLengthCounter, maxLengthWords);
+        return result;
     }
 
 }

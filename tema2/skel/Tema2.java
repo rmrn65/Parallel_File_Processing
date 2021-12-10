@@ -1,6 +1,4 @@
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.StringTokenizer;
 
 public class Tema2 {
     static Integer threadNumber;
