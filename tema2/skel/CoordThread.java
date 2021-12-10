@@ -60,6 +60,8 @@ public class CoordThread {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+        // New Executor service (the other one broke)
+        ExecutorService tpeReduce = Executors.newFixedThreadPool(threadNumber);
         // Adding results in map so we can create new tasks.
         try {
             for(int i = 0; i < futures.size() ; i ++){
@@ -70,25 +72,25 @@ public class CoordThread {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        ArrayList<ReduceCallable> futureListReduce = new ArrayList<ReduceCallable>();
+        List<ReduceCallable> futureListReduce = new ArrayList<ReduceCallable>();
         List<Future<ReduceResult>> futuresReduce = new ArrayList<>();
         List<MapResult> reduceInput; // value of hashmap at each key
         for(String key: mapResults.keySet()) {
             reduceInput = mapResults.get(key);
-
             futureListReduce.add(new ReduceCallable(key, reduceInput));
         }
         try {
-            futuresReduce = tpe.invokeAll(futureListReduce);
+            futuresReduce = tpeReduce.invokeAll(futureListReduce);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("Complete REDUCE");
-        tpe.shutdown();
+        tpeReduce.shutdown();
         try {
-            for(int i = 0; i < futures.size() ; i ++)
+            for(int i = 0; i < futuresReduce.size() ; i ++)
                 futuresReduce.get(i).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-        }    }
+        }    
+    }
 }

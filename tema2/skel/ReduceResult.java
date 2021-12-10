@@ -22,4 +22,8 @@ public class ReduceResult {
     public Float getRank() {
         return rank;
     }
+    public String toString(){
+        return "{\nDoc Name: " + docName +"\nMaximum Length: "+maxLength+"\nMaximum Words: "+maxLenWords+"\nRank: "+rank+"\n}" ;
+        
+    }
 }

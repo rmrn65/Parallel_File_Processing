@@ -23,31 +23,32 @@ public class ReduceCallable implements Callable<ReduceResult> {
     }
     @Override
     public ReduceResult call() throws Exception {
-        Float rank = 0f;
-        Integer maxLength = -1;
-        Integer maxLenWords = 0;
-        float sum = 0;
-        int counter = 0;
-        for (MapResult result : results) {
-            String biggestWord = result.getMaxLengthWords().get(0);
-            Integer numberOfBiggestWords = result.getWordsLengthCounter().get(biggestWord.length());
-            // Get size of the biggest word
-            if(maxLength < biggestWord.length()) {
-                maxLength = biggestWord.length();
-                maxLenWords = numberOfBiggestWords;
-            } else if(maxLength == biggestWord.length()) {
-                //Count the number of big words
-                maxLenWords += numberOfBiggestWords;
-            }
-            ArrayList<Integer> fibbonaciArrayList = new ArrayList<Integer>();
-            for(Integer len: result.getWordsLengthCounter().keySet()) {
-                sum += fibbonaciGenerator(fibbonaciArrayList, len) * result.getWordsLengthCounter().get(len);
-                counter += result.getWordsLengthCounter().get(len);
-            }
-        }
-        rank = sum / counter;
-        
-        return null;
+        // Float rank = 0f;
+        // Integer maxLength = -1;
+        // Integer maxLenWords = 0;
+        // float sum = 0;
+        // int counter = 0;
+        // for (MapResult result : results) {
+        //     String biggestWord = result.getMaxLengthWords().get(0);
+        //     Integer numberOfBiggestWords = result.getWordsLengthCounter().get(biggestWord.length());
+        //     // Get size of the biggest word
+        //     if(maxLength < biggestWord.length()) {
+        //         maxLength = biggestWord.length();
+        //         maxLenWords = numberOfBiggestWords;
+        //     } else if(maxLength == biggestWord.length()) {
+        //         //Count the number of big words
+        //         maxLenWords += numberOfBiggestWords;
+        //     }
+        //     ArrayList<Integer> fibbonaciArrayList = new ArrayList<Integer>();
+        //     for(Integer len: result.getWordsLengthCounter().keySet()) {
+        //         sum += fibbonaciGenerator(fibbonaciArrayList, len) * result.getWordsLengthCounter().get(len);
+        //         counter += result.getWordsLengthCounter().get(len);
+        //     }
+        // }
+        // rank = sum / counter;
+        ReduceResult result = new ReduceResult("s", 1f, 1, 1);
+        System.out.println(result);
+        return result;
     }
     
 }
