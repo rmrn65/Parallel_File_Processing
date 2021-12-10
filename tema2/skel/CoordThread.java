@@ -95,6 +95,8 @@ public class CoordThread {
             for(int i = 0; i < futuresReduce.size() ; i ++){
                 System.out.println(futuresReduce.get(i).get());
                 writer.write(futuresReduce.get(i).get().toString());
+                if(i != futuresReduce.size() - 1)
+                    writer.write('\n');
             }
             writer.close();
         } catch (InterruptedException | ExecutionException | IOException e) {

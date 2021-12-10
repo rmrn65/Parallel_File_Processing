@@ -3,7 +3,7 @@ public class ReduceResult {
     private Float rank;
     private Integer maxLength;
     private Integer maxLenWords;
-    
+
     public ReduceResult(String docName, Float rank, Integer maxLength, Integer maxLenWords) {
         this.docName = docName;
         this.rank = rank;
@@ -24,7 +24,7 @@ public class ReduceResult {
         return rank;
     }
     public String toString(){
-        return "{\nDoc Name: " + docName +"\nMaximum Length: "+maxLength+"\nMaximum Words: "+maxLenWords+"\nRank: "+String.format("%.2f", rank)+"\n}" ;
+        return docName +","+String.format("%.2f", rank)+","+maxLength+","+maxLenWords;
         
     }
 }

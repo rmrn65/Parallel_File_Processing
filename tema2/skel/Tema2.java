@@ -32,36 +32,5 @@ public class Tema2 {
         } catch (IOException e) {
             System.err.println(e);
         }
-        // Tema2 tema2 = new Tema2();
-        // try {
-        //     tema2.readFromFIle("doc.txt", 0, 0);
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
-        // try {
-        //     // create a new RandomAccessFile with filename test
-        //     RandomAccessFile raf = new RandomAccessFile("doc.txt", "rw");
-        //     byte[] b = new byte[60];
-        //     //raf.read(b,5,6);
-        //     // raf.seek(6);
-        //     raf.read(b,0,60);
-        //     System.out.println(raf.getFilePointer());
-        //     String s = new String(b, StandardCharsets.UTF_8);
-        //     System.out.println(s);
-        //     // ----- SPLIT VARIANCE ------
-        //     // String regex = new String("[;:/˜,><‘{}()#$%ˆ&+’=*”|\n\r .!?]+");
-        //     // for(String val: s.split("[;:/˜,><‘{}()#$%ˆ&+’=*”|\n\r .!?]+"))
-        //     //     System.out.println("WORD: " + val);
-
-        //     // -----TOKANIZER VARIANCE ------
-        //     StringTokenizer st = new StringTokenizer(s, " ;:/?˜\\.,><‘[]{}()!@#$%ˆ&- +’=*”|\r\n");
-        //     for(int i = 0 ; st.hasMoreTokens();i++) {
-        //         System.out.println("#" + i + ": "
-        //                        + st.nextToken());
-        //     }
-        //     raf.close();
-        //  } catch (IOException ex) {
-        //     ex.printStackTrace();
-        //  }
     }
 }
