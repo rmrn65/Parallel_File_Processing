@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 
-public class MapCallable implements Callable<Result> {
+public class MapCallable implements Callable<MapResult> {
     String docName;
     int offset;
     int fragmentSize;
@@ -24,7 +24,7 @@ public class MapCallable implements Callable<Result> {
         return Character.isLetter(c) || Character.isDigit(c);
     }
     @Override
-    public Result call() throws Exception {
+    public MapResult call() throws Exception {
         try {
             Boolean ignoreFirst = false;
             char next,prev;
@@ -84,7 +84,7 @@ public class MapCallable implements Callable<Result> {
            ex.printStackTrace();
         }
 
-        Result result = new Result(docName, wordsLengthCounter, maxLengthWords);
+        MapResult result = new MapResult(docName, wordsLengthCounter, maxLengthWords);
         return result;
     }
 

@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 public class CoordThread {
     String inputFile;
     Integer threadNumber;
-    static HashMap<String, List<Result>> mapResults;
+    static HashMap<String, List<MapResult>> mapResults;
     public CoordThread(String inputFile, Integer threadNumber) {
         this.inputFile = inputFile;
         this.threadNumber = threadNumber;
@@ -24,7 +24,7 @@ public class CoordThread {
         ExecutorService tpe = Executors.newFixedThreadPool(threadNumber);
         //AtomicInteger inQueue = new AtomicInteger(0);
         List<MapCallable> futureList = new ArrayList<MapCallable>();
-        List<Future<Result>> futures = new ArrayList<>();
+        List<Future<MapResult>> futures = new ArrayList<>();
         try{
             File file = new File(inputFile);
             // Using scanner to read file inputs
@@ -51,21 +51,32 @@ public class CoordThread {
             try {
                 futures = tpe.invokeAll(futureList);
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             System.out.println("COMPLETED");
             tpe.shutdown();
-            // tpe.awaitTermination(arg0, arg1)
             System.out.println();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
+        // Adding results in map so we can create new tasks.
         try {
             for(int i = 0; i < futures.size() ; i ++)
-                System.out.println(futures.get(i).get());
+                mapResults.get(futures.get(i).get().getDocName()).add(futures.get(i).get());
         } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        ArrayList<ReduceCallable> futureListReduce = new ArrayList<ReduceCallable>();
+        List<Future<MapResult>> futuresReduce = new ArrayList<>();
+        List<MapResult> reduceInput; // value of hashmap at each key
+        for(String key: mapResults.keySet()) {
+            reduceInput = mapResults.get(key);
+            futureListReduce.add(new ReduceCallable(key, reduceInput));
+        }
+        try {
+            futuresReduce = tpe.invokeAll(futureListReduce);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

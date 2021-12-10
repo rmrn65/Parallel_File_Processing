@@ -1,19 +1,18 @@
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-public class ReduceCallable implements Runnable {
+public class ReduceCallable implements Callable<MapResult> {
     String docName;
-    List<List<String>> maxLengthWords;
-    List<HashMap<Integer, Integer>> wordsCounter;
-    public ReduceCallable(String docName ,List<List<String>> maxLengthWords ,List<HashMap<Integer, Integer>> wordsCounter) {
+    List<MapResult> results;
+    public ReduceCallable(String docName ,List<MapResult> results) {
         this.docName = docName;
-        this.maxLengthWords = maxLengthWords;
-        this.wordsCounter = wordsCounter;
+        this.results = results;
     }
     @Override
-    public void run() {
+    public MapResult call() throws Exception {
         // TODO Auto-generated method stub
-        
+        return null;
     }
     
 }
