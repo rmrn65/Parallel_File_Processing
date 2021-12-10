@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
@@ -8,12 +9,12 @@ import java.util.StringTokenizer;
 import java.util.concurrent.Callable;
 
 public class MapCallable implements Callable<MapResult> {
-    String docName;
+    File docName;
     int offset;
     int fragmentSize;
     HashMap<Integer,Integer> wordsLengthCounter;
     List<String> maxLengthWords;
-    public MapCallable(String docName, int offset, int fragmentSize) {
+    public MapCallable(File docName, int offset, int fragmentSize) {
 		this.docName = docName;
         this.offset = offset;
         this.fragmentSize = fragmentSize;
@@ -84,7 +85,7 @@ public class MapCallable implements Callable<MapResult> {
            ex.printStackTrace();
         }
 
-        MapResult result = new MapResult(docName, wordsLengthCounter, maxLengthWords);
+        MapResult result = new MapResult(docName.getName(), wordsLengthCounter, maxLengthWords);
         return result;
     }
 

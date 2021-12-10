@@ -39,15 +39,15 @@ public class CoordThread {
                 // Tasks will be added to the pool with tpe
                 for(int i = 0 ; i < docNumber ; ++i) {
                     File currentDoc = new File("../" + scanner.next());
-                    mapResults.put(currentDoc.getPath(), new ArrayList<>());              
+                    mapResults.put(currentDoc.getName(), new ArrayList<>());              
                     long docSize = currentDoc.length();
                     int offset = 0;
                     // Create tasks for each file with right offset of fragmentSize
                     while(offset < docSize){
                         if(docSize - offset < fragmentSize)
-                            futureList.add(new MapCallable(currentDoc.getPath(), offset, (int)docSize - offset));
+                            futureList.add(new MapCallable(currentDoc, offset, (int)docSize - offset));
                         else
-                            futureList.add(new MapCallable(currentDoc.getPath(), offset, fragmentSize));
+                            futureList.add(new MapCallable(currentDoc, offset, fragmentSize));
                         offset += fragmentSize;
                     }
                 }
