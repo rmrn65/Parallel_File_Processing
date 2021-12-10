@@ -83,11 +83,11 @@ public class MapRunnable implements Runnable {
         // }
     //    // System.out.println(wordsLengthCounter.toString());
         Result result = new Result(wordsLengthCounter, maxLengthWords);
-        System.out.println(result.toString());
+        //System.out.println(result.toString());
         // The creation of the list must be synchronized so no 2 threads
         // are initializing the list. It is synchronized by the key where
         // the thread is going to add the result (the document's name).
-        synchronized(CoordThread.mapResults.get(docName)){
+        synchronized(MapRunnable.class){ //TODO SYNCRONIZEAZA PE ALTCEVA MAI LOGIC
            if(CoordThread.mapResults.get(docName) == null) {
                List<Result> resultsList = new ArrayList<>();
                resultsList.add(result);

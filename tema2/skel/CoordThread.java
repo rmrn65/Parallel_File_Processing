@@ -42,10 +42,6 @@ public class CoordThread {
                 }
             }
             tpe.shutdown();
-                for(String key:mapResults.keySet()) {
-                    List<Result> lResults = mapResults.get(key);
-                    //System.out.println(lResults);
-                }
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
