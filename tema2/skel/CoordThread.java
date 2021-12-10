@@ -62,16 +62,20 @@ public class CoordThread {
         }
         // Adding results in map so we can create new tasks.
         try {
-            for(int i = 0; i < futures.size() ; i ++)
+            for(int i = 0; i < futures.size() ; i ++){
                 mapResults.get(futures.get(i).get().getDocName()).add(futures.get(i).get());
+                // MapResult currentResult = futures.get(i).get();
+                // Hash
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
         ArrayList<ReduceCallable> futureListReduce = new ArrayList<ReduceCallable>();
-        List<Future<MapResult>> futuresReduce = new ArrayList<>();
+        List<Future<ReduceResult>> futuresReduce = new ArrayList<>();
         List<MapResult> reduceInput; // value of hashmap at each key
         for(String key: mapResults.keySet()) {
             reduceInput = mapResults.get(key);
+
             futureListReduce.add(new ReduceCallable(key, reduceInput));
         }
         try {
@@ -79,5 +83,12 @@ public class CoordThread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
+        System.out.println("Complete REDUCE");
+        tpe.shutdown();
+        try {
+            for(int i = 0; i < futures.size() ; i ++)
+                futuresReduce.get(i).get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }    }
 }
