@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -57,9 +59,7 @@ public class CoordThread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            System.out.println("COMPLETED");
             tpe.shutdown();
-            System.out.println();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
@@ -87,14 +87,16 @@ public class CoordThread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("Complete REDUCE");
-        System.out.println(futuresReduce.size());
         tpeReduce.shutdown();
+        List<ReduceResult> toSort = new ArrayList<>();
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
             for(int i = 0; i < futuresReduce.size() ; i ++){
-                System.out.println(futuresReduce.get(i).get());
-                writer.write(futuresReduce.get(i).get().toString());
+                toSort.add(futuresReduce.get(i).get());
+            }
+            Collections.sort(toSort);
+            for(int i = 0; i < toSort.size() ; i ++){
+                writer.write(toSort.get(i).toString());
                 if(i != futuresReduce.size() - 1)
                     writer.write('\n');
             }

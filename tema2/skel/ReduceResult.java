@@ -1,4 +1,4 @@
-public class ReduceResult {
+public class ReduceResult implements Comparable<ReduceResult> {
     private String docName;
     private Float rank;
     private Integer maxLength;
@@ -26,5 +26,10 @@ public class ReduceResult {
     public String toString(){
         return docName +","+String.format("%.2f", rank)+","+maxLength+","+maxLenWords;
         
+    }
+    @Override
+    public int compareTo(ReduceResult o) {
+        if(getRank() < o.getRank()) return 1;
+        else return -1;
     }
 }
