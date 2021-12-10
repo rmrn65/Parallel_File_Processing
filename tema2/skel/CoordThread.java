@@ -65,7 +65,8 @@ public class CoordThread {
         // Adding results in map so we can create new tasks.
         try {
             for(int i = 0; i < futures.size() ; i ++){
-                mapResults.get(futures.get(i).get().getDocName()).add(futures.get(i).get());
+                if(futures.get(i).get() != null)
+                    mapResults.get(futures.get(i).get().getDocName()).add(futures.get(i).get());
                 // MapResult currentResult = futures.get(i).get();
                 // Hash
             }
@@ -85,7 +86,9 @@ public class CoordThread {
             e.printStackTrace();
         }
         System.out.println("Complete REDUCE");
+        System.out.println(futuresReduce.size());
         tpeReduce.shutdown();
+
         try {
             for(int i = 0; i < futuresReduce.size() ; i ++)
                 futuresReduce.get(i).get();
