@@ -1,5 +1,7 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +15,12 @@ import java.util.concurrent.Future;
 public class CoordThread {
     String inputFile;
     Integer threadNumber;
+    String outputFile;
     static HashMap<String, List<MapResult>> mapResults;
-    public CoordThread(String inputFile, Integer threadNumber) {
+    public CoordThread(String inputFile, Integer threadNumber,String outputFile) {
         this.inputFile = inputFile;
         this.threadNumber = threadNumber;
+        this.outputFile = outputFile;
         mapResults = new HashMap<>();
     }
     public void submitTasks() throws IOException{
@@ -67,8 +71,6 @@ public class CoordThread {
             for(int i = 0; i < futures.size() ; i ++){
                 if(futures.get(i).get() != null)
                     mapResults.get(futures.get(i).get().getDocName()).add(futures.get(i).get());
-                // MapResult currentResult = futures.get(i).get();
-                // Hash
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -88,12 +90,16 @@ public class CoordThread {
         System.out.println("Complete REDUCE");
         System.out.println(futuresReduce.size());
         tpeReduce.shutdown();
-
         try {
-            for(int i = 0; i < futuresReduce.size() ; i ++)
-                futuresReduce.get(i).get();
-        } catch (InterruptedException | ExecutionException e) {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+            for(int i = 0; i < futuresReduce.size() ; i ++){
+                System.out.println(futuresReduce.get(i).get());
+                writer.write(futuresReduce.get(i).get().toString());
+            }
+            writer.close();
+        } catch (InterruptedException | ExecutionException | IOException e) {
             e.printStackTrace();
-        }    
+        }
+
     }
 }

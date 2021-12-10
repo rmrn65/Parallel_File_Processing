@@ -26,7 +26,7 @@ public class Tema2 {
         System.out.println("INPUT FILE"+inputFile);
         System.out.println("outputfile "+outputFile);
 
-        CoordThread coordThread = new CoordThread(inputFile, threadNumber);
+        CoordThread coordThread = new CoordThread(inputFile, threadNumber,outputFile);
         try{
             coordThread.submitTasks();
         } catch (IOException e) {
