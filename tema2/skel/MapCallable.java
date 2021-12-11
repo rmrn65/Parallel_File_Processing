@@ -22,7 +22,10 @@ public class MapCallable implements Callable<MapResult> {
         maxLengthWords = new ArrayList<>();
 	}
     public boolean isNotSeparator(Character c) {
-        return Character.isLetter(c) || Character.isDigit(c);
+        // String separator = ";:/?~\\.,><`[]{}()!@#$%^&-_+\'=*\"| \t\r\n";
+        // if(separator.indexOf(c) >= 0) return false;
+        // return true;
+        return Character.isLetterOrDigit(c);
     }
     @Override
     public MapResult call() throws Exception {
@@ -46,7 +49,7 @@ public class MapCallable implements Callable<MapResult> {
             if(offset != 0){
                 raf.seek(offset - 1);
                 next = (char)raf.read();
-                if(Character.isLetter(next) || Character.isDigit(next)) {
+                if(isNotSeparator(next)) {
                     ignoreFirst = true;
                 }
             }
@@ -56,7 +59,7 @@ public class MapCallable implements Callable<MapResult> {
 
             String s = new String(b, StandardCharsets.UTF_8);
             // Parse words in portion of file
-            StringTokenizer st = new StringTokenizer(s, " ;:/?˜\\.,><‘[]{}()!@#$%ˆ&- +’=*”|\r\n");
+            StringTokenizer st = new StringTokenizer(s, ";:/?~\\.,><`[]{}()!@#$%^&-_+\'=*\"| \t\r\n");
             if(ignoreFirst) {
                 st.nextToken();
             }

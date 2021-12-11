@@ -23,11 +23,12 @@ public class Tema2 {
         inputFile = args[1];// Input file
         outputFile = args[2];// Output file
 
-        CoordThread coordThread = new CoordThread(inputFile, threadNumber,outputFile);
-        try{
-            coordThread.submitTasks();
-        } catch (IOException e) {
-            System.err.println(e);
-        }
+        // CoordThread coordThread = new CoordThread(inputFile, threadNumber,outputFile);
+        // try{
+        //     coordThread.submitTasks();
+        // } catch (IOException e) {
+        //     System.err.println(e);
+        // }
+        
     }
 }

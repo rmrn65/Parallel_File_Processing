@@ -43,11 +43,12 @@ public class ReduceCallable implements Callable<ReduceResult> {
             }
             ArrayList<Integer> fibbonaciArrayList = new ArrayList<Integer>();
             for(Integer len: result.getWordsLengthCounter().keySet()) {
-                sum += fibbonaciGenerator(fibbonaciArrayList, len) * result.getWordsLengthCounter().get(len);
-                counter += result.getWordsLengthCounter().get(len);
+                    sum += fibbonaciGenerator(fibbonaciArrayList, len) * result.getWordsLengthCounter().get(len);
+                    counter += result.getWordsLengthCounter().get(len);
             }
         }
         rank = sum / counter;
+        System.out.println(counter + " " + docName);
         ReduceResult result = new ReduceResult(docName, rank, maxLength, maxLenWords);
         return result;
     }
