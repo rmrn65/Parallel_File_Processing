@@ -36,7 +36,7 @@ public class MapCallable implements Callable<MapResult> {
 
             // Create a new RandomAccessFile with given filename
             RandomAccessFile raf = new RandomAccessFile(docName, "r");
-            // // Final word
+            // Final word
             raf.seek(offset + fragmentSize - 1); // Move cursor in file by offset
             prev = (char)raf.read();
             next = (char)raf.read();
@@ -48,8 +48,9 @@ public class MapCallable implements Callable<MapResult> {
             // First word
             if(offset != 0){
                 raf.seek(offset - 1);
+                prev = (char)raf.read();
                 next = (char)raf.read();
-                if(isNotSeparator(next)) {
+                if(isNotSeparator(next) && isNotSeparator(prev) ) {
                     ignoreFirst = true;
                 }
             }
@@ -60,13 +61,12 @@ public class MapCallable implements Callable<MapResult> {
             String s = new String(b, StandardCharsets.UTF_8);
             // Parse words in portion of file
             StringTokenizer st = new StringTokenizer(s, ";:/?~\\.,><`[]{}()!@#$%^&-_+\'=*\"| \t\r\n");
-            if(ignoreFirst) {
+            if(ignoreFirst && st.hasMoreTokens()) {
                 st.nextToken();
             }
             while(st.hasMoreTokens()) {
                 // Set number of occurances of length
                 String nextWord =new String( st.nextToken().toString());
-
                 Integer value = wordsLengthCounter.get(nextWord.length());
                 if(value == null) {
                     wordsLengthCounter.put(nextWord.length(),1);

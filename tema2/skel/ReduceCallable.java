@@ -48,7 +48,6 @@ public class ReduceCallable implements Callable<ReduceResult> {
             }
         }
         rank = sum / counter;
-        System.out.println(counter + " " + docName);
         ReduceResult result = new ReduceResult(docName, rank, maxLength, maxLenWords);
         return result;
     }
